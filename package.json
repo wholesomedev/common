@@ -1,24 +1,34 @@
 {
-  "name": "@hollowverse/common",
-  "version": "3.1.3",
-  "description": "Common configurations, helper functions and code quality scripts for Hollowverse repos",
-  "repository": "https://github.com/hollowverse/common",
+  "name": "@hollowverse/config",
+  "version": "0.0.0-Set-by-CI-when-publishing",
+  "description": "Common configurations for Hollowverse repos",
+  "repository": "https://github.com/hollowverse/config",
   "license": "Unlicense",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "validate-filenames": "validate-filenames",
-    "lint-js": "eslint '**/*.js{,x}'",
-    "check-js": "tsc --noEmit",
     "lint-staged": "lint-staged",
-    "pretest": "run-p --aggregate-output validate-filenames lint-staged",
-    "test": "run-p --aggregate-output -l check-js"
+    "test": "yarn common-check",
+    "build": "exit 0",
+    "set-version": "set-version",
+    "clown": "clown",
+    "pre-push": "yarn common-check",
+    "pre-commit": "yarn common-check",
+    "common-check": "run-p -c --aggregate-output validate-filenames 'clown check' check-integrity",
+    "commitlint": "commitlint -e $GIT_PARAMS",
+    "semantic-release": "semantic-release",
+    "check-integrity": "yarn check --integrity"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn pretest",
-      "pre-push": "yarn test",
+      "pre-commit": "run-p -c --aggregate-output lint-staged pre-commit",
+      "pre-push": "yarn pre-push",
       "post-merge": "yarnhook",
       "post-checkout": "yarnhook",
-      "post-rewrite": "yarnhook"
+      "post-rewrite": "yarnhook",
+      "commit-msg": "yarn commitlint"
     }
   },
   "lint-staged": {
@@ -26,63 +36,43 @@
       "prettier --write",
       "git add"
     ],
+    "**/*.md": [
+      "prettier --write",
+      "git add"
+    ],
+    "**/!(package).json": [
+      "prettier --write",
+      "git add"
+    ],
     "**/*.js{x,}": [
-      "eslint"
+      "eslint -c .eslintrc.json --no-eslintrc"
     ]
   },
-  "dependencies": {
-    "glob": "^7.1.2",
-    "jszip": "^3.1.4",
-    "lodash": "^4.17.4",
-    "minimatch": "^3.0.4",
-    "shelljs": "^0.7.8"
-  },
-  "peerDependencies": {
-    "babel-eslint": "^8.2.1",
-    "eslint": "^4.18.0",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.6.1",
-    "husky": "^0.15.0-rc.8",
-    "lint-staged": "^6.1.1",
-    "prettier": "^1.10.2",
-    "rxjs-tslint-rules": "^3.12.0",
-    "stylelint": "^8.0.0",
-    "stylelint-config-standard": "^17.0.0",
-    "stylelint-no-unsupported-browser-features": "^1.0.0",
-    "tslint": "^5.9.1",
-    "tslint-config-prettier": "^1.8.0",
-    "tslint-eslint-rules": "^5.0.0",
-    "tslint-microsoft-contrib": "^5.0.3",
-    "tslint-react": "^3.5.1",
-    "typescript": "^2.7.2",
-    "typescript-eslint-parser": "^14.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@hollowverse/validate-filenames": "^1.3.2",
-    "@types/glob": "^5.0.32",
-    "@types/jszip": "^3.1.0",
-    "@types/lodash": "^4.14.74",
-    "@types/minimatch": "^3.0.0",
-    "@types/node": "^8.0.24",
-    "@types/shelljs": "^0.7.4",
-    "babel-eslint": "^8.2.1",
-    "eslint": "^4.18.0",
+    "@commitlint/cli": "^6.1.3",
+    "@hollowverse/clown": "^3.1.1",
+    "@hollowverse/utils": "^6.0.0",
+    "@hollowverse/validate-filenames": "^3.0.2",
+    "babel-eslint": "^8.2.2",
+    "del-cli": "^1.1.0",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.6.1",
-    "husky": "^0.15.0-rc.8",
-    "lint-staged": "^6.1.1",
-    "npm-run-all": "^4.0.2",
-    "prettier": "^1.10.2",
+    "eslint-plugin-react": "^7.7.0",
+    "eslint-plugin-typescript": "^0.11.0",
+    "husky": "^1.0.0-rc.1",
+    "lint-staged": "^7.0.5",
+    "npm-run-all": "^4.1.2",
+    "prettier": "^1.12.0",
+    "semantic-release": "^15.1.5",
     "typescript": "^2.7.2",
-    "yarnhook": "^0.1.1"
+    "yarnhook": "^0.2.0"
   },
   "engines": {
-    "node": ">= 9.2"
-  }
+    "node": ">= 6.10"
+  },
+  "private": false
 }

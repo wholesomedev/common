@@ -1,0 +1,7 @@
+{
+  "extensions": [
+    "./clown/common",
+    "./clown/publishablePackage",
+    "./clownOverrides"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "presets": [
+    "@babel/stage-3",
+    [
+      "@babel/env",
+      {
+        "targets": {
+          "node": "current"
+        },
+        "useBuiltIns": "usage"
+      }
+    ]
+  ],
+  "plugins": ["@babel/transform-runtime"],
+  "sourceMap": "both",
+  "retainLines": true
+}
